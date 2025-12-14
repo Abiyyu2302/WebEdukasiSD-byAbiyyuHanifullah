@@ -1,0 +1,157 @@
+<!DOCTYPE html><html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Edukasi SD Kelas 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#f2f2f2;
+      text-align:center;
+      padding:20px;
+    }
+    .card{
+      background:white;
+      max-width:500px;
+      margin:0 auto;
+      padding:20px;
+      border-radius:10px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    }
+    button{
+      padding:10px 15px;
+      margin:5px;
+      border:none;
+      border-radius:6px;
+      background:#4CAF50;
+      color:white;
+      font-size:16px;
+    }
+    button:hover{background:#45a049;}
+    img, video{
+      max-width:100%;
+      margin-top:15px;
+      border-radius:8px;
+    }
+  </style>
+</head>
+<body><div class="card">
+  <h2 id="judul">Game Edukasi SD Kelas 1</h2>
+  <p id="soal"></p>
+  <div id="jawaban"></div>
+  <div id="media"></div>
+</div><script>
+let indexSoal = 0;
+let benar = 0;
+
+const soal = [
+  {
+    mapel:"Bahasa Indonesia",
+    t:"Huruf apa yang ada di awal kata \"Buku\"?",
+    opsi:["A","B","C"],
+    kunci:"B",
+    benarImg:"benar1.jpg",
+    salahImg:"salah1.jpg"
+  },
+  {
+    mapel:"IPS",
+    t:"Ayah adalah anggota dari ...",
+    opsi:["Keluarga","Sekolah","Pasar"],
+    kunci:"Keluarga",
+    benarImg:"benar2.jpg",
+    salahImg:"salah2.jpg"
+  },
+  {
+    mapel:"Matematika",
+    t:"2 + 3 = ?",
+    opsi:["4","5","6"],
+    kunci:"5",
+    benarImg:"benar3.jpg",
+    salahImg:"salah3.jpg"
+  },
+  {
+    mapel:"Bahasa Inggris",
+    t:"Apa arti kata \"Cat\"?",
+    opsi:["Anjing","Kucing","Burung"],
+    kunci:"Kucing",
+    benarImg:"benar4.jpg",
+    salahImg:"salah4.jpg"
+  },
+  {
+    mapel:"IPA",
+    t:"Matahari terbit dari arah ...",
+    opsi:["Timur","Barat","Utara"],
+    kunci:"Timur",
+    benarImg:"benar5.jpg",
+    salahImg:"salah5.jpg"
+  },
+  {
+    mapel:"Bonus",
+    t:"Ayam bertelur, sapi beranak, kalau manusia ...?",
+    opsi:["Menetas","Melahirkan","Bertunas"],
+    kunci:"Melahirkan"
+  }
+];
+
+function tampilSoal(){
+  const s = soal[indexSoal];
+  document.getElementById('judul').innerText = "Soal " + (indexSoal+1) + " - " + s.mapel;
+  document.getElementById('soal').innerText = s.t;
+  const j = document.getElementById('jawaban');
+  j.innerHTML = "";
+  document.getElementById('media').innerHTML = "";
+
+  s.opsi.forEach(o=>{
+    const btn = document.createElement('button');
+    btn.innerText = o;
+    btn.onclick = ()=>cek(o);
+    j.appendChild(btn);
+  });
+}
+
+function cek(jawaban){
+  const s = soal[indexSoal];
+  const media = document.getElementById('media');
+
+  if(jawaban === s.kunci){
+    benar++;
+    if(indexSoal < 5){
+      media.innerHTML = `<img src="${s.benarImg}">`;
+    }
+    indexSoal++;
+    setTimeout(()=>{
+      if(indexSoal < soal.length){
+        tampilSoal();
+      } else {
+        selesai();
+      }
+    },1500);
+  } else {
+    if(indexSoal < 5){
+      media.innerHTML = `<img src="${s.salahImg}">`;
+    }
+    indexSoal = 0;
+    benar = 0;
+    setTimeout(tampilSoal,2000);
+  }
+}
+
+function selesai(){
+  const media = document.getElementById('media');
+  document.getElementById('jawaban').innerHTML = "";
+
+  if(benar === 6){
+    document.getElementById('soal').innerText = "Kamu hebat bisa menjawab semua soal, ini hadiah untukmu!";
+    media.innerHTML = `<video controls autoplay>
+      <source src="hadiah.mp4" type="video/mp4">
+    </video>`;
+  } else if(benar === 5){
+    document.getElementById('soal').innerText = "Kamu sudah hebat bisa menjawab 5 soal akademik, semangat ya!";
+    media.innerHTML = `<img src="semangat.gif">`;
+  }
+}
+
+// mulai game
+tampilSoal();
+</script></body>
+</html>
